@@ -401,6 +401,7 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 1);
+                SetCtrlAttribute (main_ph, PNLMAIN_BTNSTART, ATTR_DIMMED, 1);
                 paused = 1;
             }
             else
@@ -410,6 +411,7 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 0);
+                SetCtrlAttribute (main_ph, PNLMAIN_BTNSTART, ATTR_DIMMED, 0);
                 paused = 0;
             }            
             break;
