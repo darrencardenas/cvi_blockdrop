@@ -26,6 +26,7 @@
 #define  PNLMAIN_TEXTLOG                  11      /* control type: textBox, callback function: (none) */
 #define  PNLMAIN_TIMERADVANCE             12      /* control type: timer, callback function: CB_TimerAdvanceBlock */
 #define  PNLMAIN_TEXTGAMEOVER             13      /* control type: textMsg, callback function: (none) */
+#define  PNLMAIN_NUMCLEARED               14      /* control type: numeric, callback function: (none) */
 
 
      /* Control Arrays: */

@@ -32,7 +32,6 @@ blockData block = {0};
 
 CmtThreadLockHandle threadLock = 0;
 
-
 //==============================================================================
 // Global functions
 
@@ -1213,6 +1212,8 @@ int CVICALLBACK CB_BtnStart (int panel, int control, int event,
             SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 0);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 0);
             
+            SetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, 0);
+            
             SpawnBlock ();
             
             // Set drop speed
@@ -1252,6 +1253,7 @@ int CheckForLineClears (void)
     int ii = 0;  // Loop iterator
     int jj = 0;  // Loop iterator
     int kk = 0;  // Loop iterator
+    int numLineClearsTotal = 0;
     int numLineClears = 0;
     
     sprintf (msg, "Line check start\n");
@@ -1327,6 +1329,10 @@ int CheckForLineClears (void)
         }  // End loop through all rows to be cleared
     }
         
+    GetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, &numLineClearsTotal);
+    
+    SetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, numLineClearsTotal + numLineClears);
+    
     sprintf (msg, "Line check done\n");
     SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, msg);
     
@@ -1381,7 +1387,7 @@ int SpawnBlock (void)
             block.low_points[2] = block.position[3];
             block.low_points[3] = block.position[0];
             block.num_rows = 1;
-            block.rows[0] = 1;
+            block.rows[0] = 4;
             block.num_left_points = 1;
             block.left_points[0] = block.position[1];
             block.num_right_points = 1;
@@ -1400,8 +1406,8 @@ int SpawnBlock (void)
             block.low_points[1] = block.position[3];
             block.low_points[2] = block.position[2]; 
             block.num_rows = 2;
-            block.rows[0] = 1;
-            block.rows[1] = 2;
+            block.rows[0] = 2;
+            block.rows[1] = 3;
             block.num_left_points = 2;
             block.left_points[0] = block.position[1];
             block.left_points[1] = block.position[0];
@@ -1422,8 +1428,8 @@ int SpawnBlock (void)
             block.low_points[1] = block.position[0];
             block.low_points[2] = block.position[2];
             block.num_rows = 2;
-            block.rows[0] = 1;
-            block.rows[1] = 2;
+            block.rows[0] = 2;
+            block.rows[1] = 3;
             block.num_left_points = 2;
             block.left_points[0] = block.position[3];
             block.left_points[1] = block.position[1];
@@ -1465,8 +1471,8 @@ int SpawnBlock (void)
             block.low_points[1] = block.position[3];
             block.low_points[2] = block.position[0]; 
             block.num_rows = 2;
-            block.rows[0] = 1;
-            block.rows[1] = 2;            
+            block.rows[0] = 2;
+            block.rows[1] = 3;            
             block.num_left_points = 2;
             block.left_points[0] = block.position[2];
             block.left_points[1] = block.position[1];
@@ -1509,8 +1515,8 @@ int SpawnBlock (void)
             block.low_points[1] = block.position[3];
             block.low_points[2] = block.position[1];
             block.num_rows = 2;
-            block.rows[0] = 1;
-            block.rows[1] = 2;
+            block.rows[0] = 2;
+            block.rows[1] = 3;
             block.num_left_points = 2;
             block.left_points[0] = block.position[0];
             block.left_points[1] = block.position[3];
