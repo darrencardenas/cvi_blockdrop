@@ -32,6 +32,14 @@ char *void;
         
 #define DROP_DELAY              0.2  // seconds
 
+// Sound effects
+#define FOLDER_SFX              "sfx\\"
+#define SFX_CLEAR_LINE          FOLDER_SFX "clear_line.wav"
+#define SFX_CLEAR_TETRIS        FOLDER_SFX "clear_tetris.wav"
+#define SFX_ROTATE_CW           FOLDER_SFX "rotate_cw.wav"
+#define SFX_ROTATE_CCW          FOLDER_SFX "rotate_ccw.wav"
+#define SFX_GAME_OVER           FOLDER_SFX "game_over.wav"
+
 // Playing area
 #define GRID_NUM_ROWS           23  // Only lower 20 rows are visible
 #define GRID_NUM_COLS           10

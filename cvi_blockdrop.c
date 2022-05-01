@@ -163,6 +163,8 @@ int AdvanceBlock (void)
               
             // Show game over text
             SetCtrlAttribute (main_ph, PNLMAIN_TEXTGAMEOVER, ATTR_VISIBLE, 1);
+            
+            PlaySound (SFX_GAME_OVER, NULL, SND_FILENAME | SND_ASYNC);
           
             // Dim buttons
             SetCtrlAttribute (main_ph, PNLMAIN_BTNPAUSE, ATTR_DIMMED, 1);
@@ -428,7 +430,7 @@ int CVICALLBACK CB_BtnPlaySound (int panel, int control, int event,
     {
         case EVENT_COMMIT:
             //PlaySound ("coin.wav", NULL, SND_FILENAME);
-            PlaySound ("boom.wav", NULL, SND_FILENAME | SND_ASYNC);
+            PlaySound (SFX_CLEAR_TETRIS, NULL, SND_FILENAME | SND_ASYNC);
             break;
     }
     return 0;
@@ -1181,7 +1183,9 @@ int CVICALLBACK CB_BtnRotateCW (int panel, int control, int event,
             {
                 MessagePopup ("Error", "Unable to release thread lock.");
                 return -1;
-            }            
+            }       
+            
+            PlaySound (SFX_ROTATE_CW, NULL, SND_FILENAME | SND_ASYNC); 
 
             break;
     }
@@ -1299,7 +1303,14 @@ int CheckForLineClears (void)
     // Clear any marked lines
     if (numLineClears > 0)
     {
-        PlaySound ("boom.wav", NULL, SND_FILENAME | SND_ASYNC);
+        if (numLineClears == 4)
+        {            
+            PlaySound (SFX_CLEAR_TETRIS, NULL, SND_FILENAME | SND_ASYNC);     
+        }
+        else
+        {
+            PlaySound (SFX_CLEAR_LINE, NULL, SND_FILENAME | SND_ASYNC);
+        }
         
         // Begin loop through all rows to be cleared
         for (ii=0; ii<numLineClears; ii++)
