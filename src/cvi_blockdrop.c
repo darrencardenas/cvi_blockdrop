@@ -66,15 +66,16 @@ int main (int argc, char *argv[])
     }
     
     // Set seed for random number generator
-    //srand (time (NULL));
+    srand (time (NULL));  // Start pseudo randomly
     
-    //srand(1);  // 1 -> O piece
-    srand (5);  // 5 -> I piece
-    //srand (7);  // 7 -> Z piece
-    //srand(8);  // 8 -> J piece
-    //srand(9);  // 9 -> S piece
-    //srand(12);  // 12 -> T piece
-    //srand(13);  // 13 -> L piece
+    // Start with a specific piece for testing purposes
+    //srand (1);   // 1  -> O piece
+    //srand (5);   // 5  -> I piece
+    //srand (7);   // 7  -> Z piece
+    //srand (8);   // 8  -> J piece
+    //srand (9);   // 9  -> S piece
+    //srand (12);  // 12 -> T piece
+    //srand (13);  // 13 -> L piece
     
     RunUserInterface ();
         
@@ -97,9 +98,6 @@ int AdvanceBlock (void)
     int gotLock = 0;
     int ii = 0;  // Loop iterator
     int status = 0;
-    
-    // DEBUG
-    //int jj = 0;
         
     status = CmtGetLockEx (threadLock, 0, CMT_WAIT_FOREVER, &gotLock);
     if (status != 0)
@@ -114,8 +112,8 @@ int AdvanceBlock (void)
         // Active block reached the bottom
         if (block.low_points[ii].y == GRID_NUM_ROWS)
         {
-          block_stop = 1;
-          break;
+            block_stop = 1;
+            break;
         }
         
         GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.low_points[ii].x, block.low_points[ii].y+1), 
@@ -124,22 +122,6 @@ int AdvanceBlock (void)
         // Active block reached another block
         if (color != VAL_WHITE)
         {
-            /*
-            // DEBUG
-            
-            printf ("stopped on ii = %d\n", ii);
-            for (jj=0;jj<NUM_SQUARES_PER_BLOCK;jj++)
-            {
-                printf ("block %d: (%d, %d)\n", jj, block.position[jj].x, block.position[jj].y);
-            }
-            for (jj=0;jj<block.num_low_points;jj++)
-            {
-                printf ("low point %d: (%d, %d)\n", jj, block.low_points[jj].x, block.low_points[jj].y);
-            }
-            printf ("stop point x is %d\n", block.low_points[ii].x);
-            printf ("stop point y is %d\n\n", block.low_points[ii].y+1);
-            */
-            
             block_stop = 1;
             break;
         }
@@ -421,21 +403,6 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
     return 0;
     
 }  // End of CB_BtnPause()
-
-
-int CVICALLBACK CB_BtnPlaySound (int panel, int control, int event,
-                                 void *callbackData, int eventData1, int eventData2)
-{
-    switch (event)
-    {
-        case EVENT_COMMIT:
-            //PlaySound ("coin.wav", NULL, SND_FILENAME);
-            PlaySound (SFX_CLEAR_TETRIS, NULL, SND_FILENAME | SND_ASYNC);
-            break;
-    }
-    return 0;
-    
-}  // End of CB_BtnPlaySound()
 
 
 int CVICALLBACK CB_BtnQuit (int panel, int control, int event,
@@ -1560,5 +1527,3 @@ int SpawnBlock (void)
     return game_status;
     
 }  // End of SpawnBlock()
-
-

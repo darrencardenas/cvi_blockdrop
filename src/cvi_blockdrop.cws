@@ -1,6 +1,6 @@
 [Workspace Header]
 Version = 2000
-Pathname = "/c/projects/cvi_blockdrop/cvi_blockdrop.cws"
+Pathname = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.cws"
 CVI Dir = "/c/program files (x86)/national instruments/cvi2020"
 CVI Shared Dir = "/C/Program Files (x86)/National Instruments/Shared/CVI"
 CVI Pub Local Dir = "/C/ProgramData/National Instruments/CVI2020"
@@ -30,7 +30,7 @@ Save Changes Before Compiling = "Always"
 Hide Windows = False
 Break At First Statement = False
 Sort Type = "File Name"
-Number of Opened Files = 3
+Number of Opened Files = 0
 Window Confinement Region Enabled = True
 MainColumnWidth = 265
 FileDateColumnWidth = 70
@@ -46,48 +46,36 @@ Batch Build Release = False
 Batch Build Debug = False
 
 [File 0001]
-Path = "/c/projects/cvi_blockdrop/cvi_blockdrop_UIR.uir"
-File Type = "User Interface Resource"
-Disk Date = 3734259464
+Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.h"
+File Type = "Include"
+Disk Date = 3734289678
 In Projects = "1,"
-Window Top = 157
-Window Left = 66
-Window Height = 401
-Window Width = 630
-Window Z-Order = 2
+Source Window State = "1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,73,0,0,0,400,600,1,0,"
+Window Top = 31
 
 [File 0002]
-Path = "/c/projects/cvi_blockdrop/cvi_blockdrop.c"
-File Type = "CSource"
-Disk Date = 3734260005
-In Projects = "1,"
-Source Window State = "1,507,507,507,24,37,24,0,3,0,0,496,0,454,30,0,1144,0,507,37,401,630,1,0,"
-Line Tags = "69,226,251,453,1088,1274,1355,"
-Window Top = 126
-Window Left = 50
-Window Z-Order = 1
-
-[File 0003]
-Path = "/c/projects/cvi_blockdrop/cvi_blockdrop.h"
+Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop_UIR.h"
 File Type = "Include"
-Disk Date = 3734176753
-In Projects = "1,"
-Source Window State = "1,2,2,2,30,30,30,0,0,0,0,0,0,0,0,0,14,0,2,30,401,630,1,0,"
-Window Top = 95
-Window Left = 34
-Window Z-Order = 3
-
-[File 0004]
-Path = "/c/projects/cvi_blockdrop/cvi_blockdrop_UIR.h"
-File Type = "Include"
-Disk Date = 3734258671
+Disk Date = 3734366942
 In Projects = "1,"
 Source Window State = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"
 
-[Tab Order]
-Tab 0001 = "/c/projects/cvi_blockdrop/cvi_blockdrop.h"
-Tab 0002 = "/c/projects/cvi_blockdrop/cvi_blockdrop.c"
-Tab 0003 = "/c/projects/cvi_blockdrop/cvi_blockdrop_UIR.uir"
+[File 0003]
+Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop_UIR.uir"
+File Type = "User Interface Resource"
+Disk Date = 3734366942
+In Projects = "1,"
+Window Top = 64
+Window Left = 26
+Window Height = 281
+Window Width = 630
+
+[File 0004]
+Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.c"
+File Type = "CSource"
+Disk Date = 3734369079
+In Projects = "1,"
+Source Window State = "1,1538,1538,1538,9,9,9,0,0,0,0,0,0,0,0,0,1526,0,1538,9,400,600,0,0,"
 
 [Default Build Config 0001 Debug]
 Generate Browse Info = True
