@@ -28,10 +28,6 @@
 #define  PNLMAIN_TIMERADVANCE             13      /* control type: timer, callback function: CB_TimerAdvanceBlock */
 #define  PNLMAIN_TEXTGAMEOVER             14      /* control type: textMsg, callback function: (none) */
 #define  PNLMAIN_NUMCLEARED               15      /* control type: numeric, callback function: (none) */
-#define  PNLMAIN_TEXTMSG                  16      /* control type: textMsg, callback function: (none) */
-#define  PNLMAIN_TEXTMSG_3                17      /* control type: textMsg, callback function: (none) */
-#define  PNLMAIN_TEXTMSG_4                18      /* control type: textMsg, callback function: (none) */
-#define  PNLMAIN_TEXTMSG_2                19      /* control type: textMsg, callback function: (none) */
 
 
      /* Control Arrays: */
