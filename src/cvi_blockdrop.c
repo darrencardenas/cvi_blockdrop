@@ -150,6 +150,7 @@ int AdvanceBlock (void)
           
             // Dim buttons
             SetCtrlAttribute (main_ph, PNLMAIN_BTNPAUSE, ATTR_DIMMED, 1);
+            SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECCW, ATTR_DIMMED, 1);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 1);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 1);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 1);
@@ -191,6 +192,20 @@ int AdvanceBlock (void)
     return 0;    
 
 }  // End of AdvanceBlock()
+
+
+int CVICALLBACK CB_BtnHardDrop (int panel, int control, int event,
+                                void *callbackData, int eventData1, int eventData2)
+{
+    switch (event)
+    {
+        case EVENT_COMMIT:
+
+            break;
+    }
+    return 0;
+    
+}  // End of CB_BtnHardDrop()
 
 
 int CVICALLBACK CB_BtnMoveDown (int panel, int control, int event,
@@ -382,6 +397,7 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
             {
                 SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_ENABLED, 0);
                 // Dim block control buttons
+                SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECCW, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 1);
@@ -392,6 +408,7 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
             {
                 SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_ENABLED, 1);
                 // Show block control buttons
+                SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECCW, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 0);
@@ -419,6 +436,747 @@ int CVICALLBACK CB_BtnQuit (int panel, int control, int event,
     return 0;
     
 }  // End of CB_BtnQuit()
+
+
+int CVICALLBACK CB_BtnRotateCCW (int panel, int control, int event,
+                                 void *callbackData, int eventData1, int eventData2)
+{
+    char msg[512] = "\0";
+    int colors[NUM_SQUARES_PER_BLOCK] = { VAL_WHITE, VAL_WHITE, VAL_WHITE, VAL_WHITE };
+    int gotLock = 0;
+    int ii = 0;  // Loop iterator
+    int status = 0;
+    
+    switch (event)
+    {
+        case EVENT_COMMIT:
+            
+            status = CmtGetLockEx (threadLock, 0, CMT_WAIT_FOREVER, &gotLock);
+            if (status != 0)
+            {
+                MessagePopup ("Error", "Unable to get thread lock.");
+                return -1;
+            }            
+                       
+            // Clear the block colors
+            for (ii=0; ii<NUM_SQUARES_PER_BLOCK; ii++)
+            {                         
+                SetTableCellAttribute (main_ph, PNLMAIN_GRID, block.position[ii], ATTR_TEXT_BGCOLOR, VAL_WHITE);
+            }  
+            
+            // Assign block color and coordinates
+            switch (block.type)
+            {
+                case BLOCK_I:
+                    
+                    if (block.orientation == ORIENTATION_1)
+                    {
+                        // No need to check for grid edge clearances for this orientation
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x, block.position[3].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x, block.position[3].y-2), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x, block.position[3].y-3), 
+                                               ATTR_TEXT_BGCOLOR, &colors[2]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE) || (colors[2] != VAL_WHITE))
+                        {
+                            break;
+                        }                        
+                                                
+                        block.orientation = ORIENTATION_2;                    
+                        block.position[0] = MakePoint (block.position[0].x-1, block.position[0].y-3);
+                        block.position[1] = MakePoint (block.position[1].x+2, block.position[1].y-2);
+                        block.position[2] = MakePoint (block.position[2].x+1, block.position[2].y-1);
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 1;
+                        block.low_points[0] = block.position[3];                        
+                        block.num_rows = 4;
+                        block.rows[0] = block.position[0].y;
+                        block.rows[1] = block.position[1].y;
+                        block.rows[2] = block.position[2].y;
+                        block.rows[3] = block.position[3].y;
+                        block.num_left_points = 4;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[1];
+                        block.left_points[2] = block.position[2];
+                        block.left_points[3] = block.position[3];
+                        block.num_right_points = 4;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[1];
+                        block.right_points[2] = block.position[2];
+                        block.right_points[3] = block.position[3];
+                    }
+                    else if (block.orientation == ORIENTATION_2)
+                    {
+                        // Check for grid edge clearances
+                        if ((block.position[3].x < 3) ||
+                            (block.position[3].x == GRID_NUM_COLS))
+                        {
+                            break;
+                        }
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x-2, block.position[3].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x-1, block.position[3].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x+1, block.position[3].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[2]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE) || (colors[2] != VAL_WHITE))
+                        {
+                            break;
+                        }
+                                                                                            
+                        block.orientation = ORIENTATION_1;
+                        block.position[0] = MakePoint (block.position[0].x+1, block.position[0].y+3);
+                        block.position[1] = MakePoint (block.position[1].x-2, block.position[1].y+2);
+                        block.position[2] = MakePoint (block.position[2].x-1, block.position[2].y+1);
+                        // Note that block.position[3] does not change during rotation                                            
+                        block.num_low_points = 4;
+                        block.low_points[0] = block.position[1];
+                        block.low_points[1] = block.position[2];
+                        block.low_points[2] = block.position[3];
+                        block.low_points[3] = block.position[0];
+                        block.num_rows = 1;
+                        block.rows[0] = block.position[1].y;
+                        block.num_left_points = 1;
+                        block.left_points[0] = block.position[1];
+                        block.num_right_points = 1;
+                        block.right_points[0] = block.position[0];                        
+                    }
+                    break;
+                                        
+                case BLOCK_J:
+                                                                            
+                    if (block.orientation == ORIENTATION_1)
+                    {
+                        // No need to check for grid edge clearances for this orientation
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x, block.position[2].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x, block.position[2].y-2), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE))
+                        {
+                            break;
+                        }
+                        
+                        block.orientation = ORIENTATION_4;
+                        block.position[0] = MakePoint (block.position[0].x+2, block.position[0].y-2);
+                        block.position[1] = MakePoint (block.position[1].x+2, block.position[1].y);
+                        // Note that block.position[2] does not change during rotation
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 2;
+                        block.low_points[0] = block.position[3];
+                        block.low_points[1] = block.position[2];                        
+                        block.num_rows = 3;
+                        block.rows[0] = block.position[0].y;
+                        block.rows[1] = block.position[1].y;
+                        block.rows[2] = block.position[2].y;
+                        block.num_left_points = 3;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[1];
+                        block.left_points[2] = block.position[3];
+                        block.num_right_points = 3;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[1];
+                        block.right_points[2] = block.position[2];
+                    } 
+                    else if (block.orientation == ORIENTATION_2)
+                    {
+                        // Check for grid edge clearances
+                        if (block.position[3].x == 1)
+                        {
+                            break;
+                        }
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x+1, block.position[3].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x-1, block.position[3].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x-1, block.position[3].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[2]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE) || (colors[2] != VAL_WHITE))
+                        {
+                            break;
+                        }                      
+                        
+                        block.orientation = ORIENTATION_1;                        
+                        block.position[0] = MakePoint (block.position[0].x-2, block.position[0].y+2);
+                        block.position[1] = MakePoint (block.position[1].x-1, block.position[1].y);
+                        block.position[2] = MakePoint (block.position[2].x+1, block.position[2].y+2);
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 3;
+                        block.low_points[0] = block.position[0];
+                        block.low_points[1] = block.position[3];
+                        block.low_points[2] = block.position[2];                        
+                        block.num_rows = 2;
+                        block.rows[0] = block.position[1].y;
+                        block.rows[1] = block.position[0].y;
+                        block.num_left_points = 2;
+                        block.left_points[0] = block.position[1];
+                        block.left_points[1] = block.position[0];
+                        block.num_right_points = 2;
+                        block.right_points[0] = block.position[1];
+                        block.right_points[1] = block.position[2];
+                    }
+                    else if (block.orientation == ORIENTATION_3)
+                    {
+                        // No need to check for grid edge clearances for this orientation
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[1].x, block.position[1].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[1].x, block.position[1].y+1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[1].x+1, block.position[1].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[2]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE) || (colors[2] != VAL_WHITE))
+                        {
+                            break;
+                        }                        
+                        
+                        block.orientation = ORIENTATION_2;                        
+                        block.position[0] = MakePoint (block.position[0].x, block.position[0].y-2);
+                        // Note that block.position[1] does not change during rotation
+                        block.position[2] = MakePoint (block.position[2].x-1, block.position[2].y-1);                       
+                        block.position[3] = MakePoint (block.position[3].x+1, block.position[3].y+1);
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 2;
+                        block.low_points[0] = block.position[3];
+                        block.low_points[1] = block.position[0];                        
+                        block.num_rows = 3;
+                        block.rows[0] = block.position[2].y;
+                        block.rows[1] = block.position[1].y;
+                        block.rows[2] = block.position[3].y;
+                        block.num_left_points = 3;
+                        block.left_points[0] = block.position[2];
+                        block.left_points[1] = block.position[1];
+                        block.left_points[2] = block.position[3];
+                        block.num_right_points = 3;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[1];
+                        block.right_points[2] = block.position[3];
+                    }                                
+                    else if (block.orientation == ORIENTATION_4)
+                    {
+                        // Check for grid edge clearances
+                        if (block.position[3].x == 1)
+                        {
+                            break;
+                        }
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[1].x-1, block.position[1].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[1].x-2, block.position[1].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE))
+                        {
+                            break;
+                        }
+                        
+                        block.orientation = ORIENTATION_3;
+                        block.position[0] = MakePoint (block.position[0].x, block.position[0].y+2);
+                        block.position[1] = MakePoint (block.position[1].x-1, block.position[1].y);
+                        block.position[2] = MakePoint (block.position[2].x, block.position[2].y-1);
+                        block.position[3] = MakePoint (block.position[3].x-1, block.position[3].y-1);
+                        block.num_low_points = 3;
+                        block.low_points[0] = block.position[3];
+                        block.low_points[1] = block.position[1];
+                        block.low_points[2] = block.position[0];                        
+                        block.num_rows = 2;
+                        block.rows[0] = block.position[2].y;
+                        block.rows[1] = block.position[0].y;
+                        block.num_left_points = 2;
+                        block.left_points[0] = block.position[3];
+                        block.left_points[1] = block.position[0];
+                        block.num_right_points = 2;
+                        block.right_points[0] = block.position[2];
+                        block.right_points[1] = block.position[0];
+                    }
+                    break; 
+                    
+                case BLOCK_L:
+                    
+                    if (block.orientation == ORIENTATION_1)
+                    {
+                        // No need to check for grid edge clearances for this orientation
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x, block.position[3].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x-1, block.position[3].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE))
+                        {
+                            break;
+                        }
+                        
+                        block.orientation = ORIENTATION_4;
+                        block.position[0] = MakePoint (block.position[0].x+1, block.position[0].y-2);
+                        block.position[1] = MakePoint (block.position[1].x+1, block.position[1].y-2);
+                        // Note that block.position[2] does not change during rotation
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 2;
+                        block.low_points[0] = block.position[1];
+                        block.low_points[1] = block.position[2];                        
+                        block.num_rows = 3;
+                        block.rows[0] = block.position[0].y;
+                        block.rows[1] = block.position[3].y;
+                        block.rows[2] = block.position[2].y;
+                        block.num_left_points = 3;
+                        block.left_points[0] = block.position[1];
+                        block.left_points[1] = block.position[3];
+                        block.left_points[2] = block.position[2];
+                        block.num_right_points = 3;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[3];
+                        block.right_points[2] = block.position[2];
+                    }
+                    else if (block.orientation == ORIENTATION_2)
+                    {
+                        // Check for grid edge clearances
+                        if (block.position[1].x == 1)
+                        {
+                            break;
+                        }
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x-1, block.position[2].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x, block.position[3].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE))
+                        {
+                            break;
+                        }     
+                        
+                        block.orientation = ORIENTATION_1;
+                        block.position[0] = MakePoint (block.position[0].x, block.position[0].y+2);
+                        block.position[1] = MakePoint (block.position[1].x-1, block.position[1].y+1);
+                        block.position[2] = MakePoint (block.position[2].x+1, block.position[2].y);
+                        block.position[3] = MakePoint (block.position[3].x, block.position[3].y-1);
+                        block.num_low_points = 3;
+                        block.low_points[0] = block.position[1];
+                        block.low_points[1] = block.position[0];
+                        block.low_points[2] = block.position[2];                        
+                        block.num_rows = 2;
+                        block.rows[0] = block.position[3].y;
+                        block.rows[1] = block.position[2].y;
+                        block.num_left_points = 2;
+                        block.left_points[0] = block.position[3];
+                        block.left_points[1] = block.position[1];
+                        block.num_right_points = 2;
+                        block.right_points[0] = block.position[3];
+                        block.right_points[1] = block.position[2];
+                    }
+                    else if (block.orientation == ORIENTATION_3)
+                    {
+                        // No need to check for grid edge clearances for this orientation
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[1].x, block.position[1].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[1].x, block.position[1].y+1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[1].x+1, block.position[1].y+1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[2]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE) || (colors[2] != VAL_WHITE))
+                        {
+                            break;
+                        }
+                        
+                        block.orientation = ORIENTATION_2;
+                        block.position[0] = MakePoint (block.position[0].x+1, block.position[0].y-1);
+                        // Note that block.position[1] does not change during rotation
+                        block.position[2] = MakePoint (block.position[2].x+1, block.position[2].y);
+                        block.position[3] = MakePoint (block.position[3].x, block.position[3].y+1);
+                        block.num_low_points = 2;
+                        block.low_points[0] = block.position[2];
+                        block.low_points[1] = block.position[3];                        
+                        block.num_rows = 3;
+                        block.rows[0] = block.position[0].y;
+                        block.rows[1] = block.position[1].y;
+                        block.rows[2] = block.position[2].y;
+                        block.num_left_points = 3;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[1];
+                        block.left_points[2] = block.position[2];
+                        block.num_right_points = 3;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[1];
+                        block.right_points[2] = block.position[3];
+                    }
+                    else if (block.orientation == ORIENTATION_4)
+                    {
+                        // Check for grid edge clearances
+                        if (block.position[2].x == 1)
+                        {
+                            break;
+                        }
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x-1, block.position[3].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x-2, block.position[3].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x-2, block.position[3].y+1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[2]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE) || (colors[2] != VAL_WHITE))
+                        {
+                            break;
+                        }                            
+                        
+                        block.orientation = ORIENTATION_3;
+                        block.position[0] = MakePoint (block.position[0].x-2, block.position[0].y+1);
+                        block.position[1] = MakePoint (block.position[1].x, block.position[1].y+1);
+                        block.position[2] = MakePoint (block.position[2].x-2, block.position[2].y);
+                        // Note that block.position[3] does not change during rotation                        
+                        block.num_low_points = 3;
+                        block.low_points[0] = block.position[2];
+                        block.low_points[1] = block.position[1];
+                        block.low_points[2] = block.position[3];                        
+                        block.num_rows = 2;
+                        block.rows[0] = block.position[0].y;
+                        block.rows[1] = block.position[2].y;
+                        block.num_left_points = 2;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[2];
+                        block.num_right_points = 2;
+                        block.right_points[0] = block.position[3];
+                        block.right_points[1] = block.position[2];
+                    }                    
+                    break;
+                    
+                case BLOCK_O:
+                    // Same orientation for every rotation
+                    break;
+                    
+                case BLOCK_S:
+                    
+                    if (block.orientation == ORIENTATION_1)
+                    {
+                        // No need to check for grid edge clearances for this orientation
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x-1, block.position[2].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x-1, block.position[2].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE))
+                        {
+                            break;
+                        }
+                        
+                        block.orientation = ORIENTATION_2;
+                        block.position[0] = MakePoint (block.position[0].x-2, block.position[0].y-1);
+                        block.position[1] = MakePoint (block.position[1].x, block.position[1].y-1);
+                        // Note that block.position[2] does not change during rotation
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 2;
+                        block.low_points[0] = block.position[1];
+                        block.low_points[1] = block.position[3];                        
+                        block.num_rows = 3;
+                        block.rows[0] = block.position[0].y;
+                        block.rows[1] = block.position[1].y;
+                        block.rows[2] = block.position[3].y;
+                        block.num_left_points = 3;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[1];
+                        block.left_points[2] = block.position[3];
+                        block.num_right_points = 3;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[2];
+                        block.right_points[2] = block.position[3];
+                    }
+                    else if (block.orientation == ORIENTATION_2)
+                    {
+                        // Check for grid edge clearances
+                        if (block.position[2].x == GRID_NUM_COLS)
+                        {
+                            break;
+                        }
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x+1, block.position[2].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x-1, block.position[3].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE))
+                        {
+                            break;
+                        }  
+                        
+                        block.orientation = ORIENTATION_1;
+                        block.position[0] = MakePoint (block.position[0].x+2, block.position[0].y+1);
+                        block.position[1] = MakePoint (block.position[1].x, block.position[1].y+1);
+                        // Note that block.position[2] does not change during rotation
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 3;
+                        block.low_points[0] = block.position[1];
+                        block.low_points[1] = block.position[3];
+                        block.low_points[2] = block.position[0];                        
+                        block.num_rows = 2;
+                        block.rows[0] = block.position[2].y;
+                        block.rows[1] = block.position[3].y;
+                        block.num_left_points = 2;
+                        block.left_points[0] = block.position[2];
+                        block.left_points[1] = block.position[1];
+                        block.num_right_points = 2;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[3];
+                    }                    
+                    break;
+                    
+                case BLOCK_T:
+                    
+                    if (block.orientation == ORIENTATION_1)
+                    {
+                        // No need to check for grid edge clearances for this orientation
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x, block.position[2].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        if (colors[0] != VAL_WHITE)
+                        {
+                            break;
+                        }
+                        
+                        block.orientation = ORIENTATION_4;
+                        block.num_rows = 3;
+                        block.position[0] = MakePoint (block.position[0].x-1, block.position[0].y+1);
+                        block.position[1] = MakePoint (block.position[1].x+1, block.position[1].y+1);
+                        // Note that block.position[2] does not change during rotation
+                        block.position[3] = MakePoint (block.position[3].x-1, block.position[3].y-1); 
+                        block.num_low_points = 2;
+                        block.low_points[0] = block.position[0];
+                        block.low_points[1] = block.position[1];                        
+                        block.num_rows = 3;
+                        block.rows[0] = block.position[3].y;
+                        block.rows[1] = block.position[2].y;
+                        block.rows[2] = block.position[1].y;
+                        block.num_left_points = 3;
+                        block.left_points[0] = block.position[3];
+                        block.left_points[1] = block.position[0];
+                        block.left_points[2] = block.position[1];
+                        block.num_right_points = 3;
+                        block.right_points[0] = block.position[3];
+                        block.right_points[1] = block.position[2];
+                        block.right_points[2] = block.position[1];
+                    }
+                    else if (block.orientation == ORIENTATION_2)
+                    {
+                        // Check for grid edge clearances
+                        if (block.position[2].x == 1)
+                        {
+                            break;
+                        }
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x-1, block.position[2].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        if (colors[0] != VAL_WHITE)
+                        {
+                            break;
+                        }
+                        
+                        block.orientation = ORIENTATION_1;
+                        // Note that block.position[0] does not change during rotation
+                        block.position[1] = MakePoint (block.position[1].x-1, block.position[1].y-1);
+                        // Note that block.position[2] does not change during rotation
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 3;
+                        block.low_points[0] = block.position[1];
+                        block.low_points[1] = block.position[2];
+                        block.low_points[2] = block.position[3];                        
+                        block.num_rows = 2;
+                        block.rows[0] = block.position[0].y;
+                        block.rows[1] = block.position[2].y;
+                        block.num_left_points = 2;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[1];
+                        block.num_right_points = 2;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[3];
+                    }
+                    else if (block.orientation == ORIENTATION_3)
+                    {
+                        // No need to check for grid edge clearances for this orientation
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x, block.position[2].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        if (colors[0] != VAL_WHITE)
+                        {
+                            break;
+                        }
+                        
+                        block.orientation = ORIENTATION_2;
+                        block.position[0] = MakePoint (block.position[0].x+1, block.position[0].y-1);
+                        // Note that block.position[1] does not change during rotation                        
+                        // Note that block.position[2] does not change during rotation
+                        // Note that block.position[3] does not change during rotation 
+                        block.num_low_points = 2;
+                        block.low_points[0] = block.position[1];
+                        block.low_points[1] = block.position[3];                        
+                        block.num_rows = 3;
+                        block.rows[0] = block.position[0].y;
+                        block.rows[1] = block.position[2].y;
+                        block.rows[2] = block.position[1].y;
+                        block.num_left_points = 3;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[2];
+                        block.left_points[2] = block.position[1];
+                        block.num_right_points = 3;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[3];
+                        block.right_points[2] = block.position[1];
+                    }
+                    else if (block.orientation == ORIENTATION_4)
+                    {
+                        // Check for grid edge clearances
+                        if (block.position[2].x == GRID_NUM_COLS)
+                        {
+                            break;
+                        }
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x+1, block.position[2].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        if (colors[0] != VAL_WHITE)
+                        {
+                            break;
+                        }
+                        
+                        block.orientation = ORIENTATION_3;                        
+                        // Note that block.position[0] does not change during rotation
+                        // Note that block.position[1] does not change during rotation
+                        // Note that block.position[2] does not change during rotation
+                        block.position[3] = MakePoint (block.position[3].x+1, block.position[3].y+1);
+                        block.num_low_points = 3;
+                        block.low_points[0] = block.position[0];
+                        block.low_points[1] = block.position[1];
+                        block.low_points[2] = block.position[3];                        
+                        block.num_rows = 2;
+                        block.rows[0] = block.position[2].y;
+                        block.rows[1] = block.position[1].y;
+                        block.num_left_points = 2;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[1];
+                        block.num_right_points = 2;
+                        block.right_points[0] = block.position[3];
+                        block.right_points[1] = block.position[1];
+                    }                    
+                    break;                    
+                    
+                case BLOCK_Z:
+                    
+                    if (block.orientation == ORIENTATION_1)
+                    {
+                        // No need to check for grid edge clearances for this orientation
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x+1, block.position[2].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x+1, block.position[2].y-1), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE))
+                        {
+                            break;
+                        }  
+                        
+                        block.orientation = ORIENTATION_2;
+                        block.position[0] = MakePoint (block.position[0].x+2, block.position[0].y-1);
+                        block.position[1] = MakePoint (block.position[1].x, block.position[1].y-1);
+                        // Note that block.position[2] does not change during rotation
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 2;
+                        block.low_points[0] = block.position[3];
+                        block.low_points[1] = block.position[1];                        
+                        block.num_rows = 3;
+                        block.rows[0] = block.position[0].y;
+                        block.rows[1] = block.position[1].y;
+                        block.rows[2] = block.position[3].y;
+                        block.num_left_points = 3;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[2];
+                        block.left_points[2] = block.position[3];
+                        block.num_right_points = 3;
+                        block.right_points[0] = block.position[0];
+                        block.right_points[1] = block.position[1];
+                        block.right_points[2] = block.position[3];
+                    }
+                    else if (block.orientation == ORIENTATION_2)
+                    {
+                        // Check for grid edge clearances
+                        if (block.position[2].x == 1)
+                        {
+                            break;
+                        }
+                        
+                        // Check for clearances around other blocks
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[2].x-1, block.position[2].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[0]); 
+                        GetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[3].x+1, block.position[3].y), 
+                                               ATTR_TEXT_BGCOLOR, &colors[1]);
+                        if ((colors[0] != VAL_WHITE) || (colors[1] != VAL_WHITE))
+                        {
+                            break;
+                        }  
+                        
+                        block.orientation = ORIENTATION_1;
+                        block.position[0] = MakePoint (block.position[0].x-2, block.position[0].y+1);
+                        block.position[1] = MakePoint (block.position[1].x, block.position[1].y+1);
+                        // Note that block.position[2] does not change during rotation
+                        // Note that block.position[3] does not change during rotation
+                        block.num_low_points = 3;
+                        block.low_points[0] = block.position[0];
+                        block.low_points[1] = block.position[3];
+                        block.low_points[2] = block.position[1];                        
+                        block.num_rows = 2;
+                        block.rows[0] = block.position[2].y;
+                        block.rows[1] = block.position[3].y;
+                        block.num_left_points = 2;
+                        block.left_points[0] = block.position[0];
+                        block.left_points[1] = block.position[3];
+                        block.num_right_points = 2;
+                        block.right_points[0] = block.position[2];
+                        block.right_points[1] = block.position[1];
+                    }            
+                    break;                    
+                                                                        
+                default:
+                    sprintf (msg, "Unknown block type: %d\n", block.type);
+                    SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, msg);
+                    break;
+                                                                            
+            }  // End of switch()
+                    
+            // Set the block colors
+            for (ii=0; ii<NUM_SQUARES_PER_BLOCK; ii++)
+            {                         
+                SetTableCellAttribute (main_ph, PNLMAIN_GRID, block.position[ii], ATTR_TEXT_BGCOLOR, block.color);
+            }     
+            
+            status = CmtReleaseLock (threadLock);
+            if (status != 0)
+            {
+                MessagePopup ("Error", "Unable to release thread lock.");
+                return -1;
+            }       
+            
+            PlaySound (SFX_ROTATE, NULL, SND_FILENAME | SND_ASYNC); 
+
+            break;
+    }
+    return 0;
+    
+}  // End of CB_BtnRotateCCW()
 
 
 int CVICALLBACK CB_BtnRotateCW (int panel, int control, int event,
@@ -1152,7 +1910,7 @@ int CVICALLBACK CB_BtnRotateCW (int panel, int control, int event,
                 return -1;
             }       
             
-            PlaySound (SFX_ROTATE_CW, NULL, SND_FILENAME | SND_ASYNC); 
+            PlaySound (SFX_ROTATE, NULL, SND_FILENAME | SND_ASYNC); 
 
             break;
     }
@@ -1181,6 +1939,7 @@ int CVICALLBACK CB_BtnStart (int panel, int control, int event,
             
             // Show block control buttons
             SetCtrlAttribute (main_ph, PNLMAIN_BTNPAUSE, ATTR_DIMMED, 0); 
+            SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECCW, ATTR_DIMMED, 0);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 0);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 0);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 0);
@@ -1527,3 +2286,5 @@ int SpawnBlock (void)
     return game_status;
     
 }  // End of SpawnBlock()
+
+
