@@ -1953,6 +1953,8 @@ int CVICALLBACK CB_BtnStart (int panel, int control, int event,
             
             // Start advancing blocks
             SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_ENABLED, 1);
+            
+            SetActiveCtrl (main_ph, PNLMAIN_BTNROTATECW);
 
             break;
     }

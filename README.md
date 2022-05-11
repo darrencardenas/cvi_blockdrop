@@ -15,6 +15,7 @@ This game uses a table control as the playing area. The background color of each
 - Move left: LEFT ARROW
 - Move right: RIGHT ARROW
 - Rotate Clockwise: UP ARROW
+- Rotate Counter-Clockwise: ESC
 
 ## Implemented
 - Line clears
@@ -24,6 +25,6 @@ This game uses a table control as the playing area. The background color of each
 ## To Do
 - Soft drop
 - Hard drop
-- Counter-Clockwise rotation
+
 
 
