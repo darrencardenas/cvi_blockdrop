@@ -56,7 +56,7 @@ int main (int argc, char *argv[])
     {
       MessagePopup ("Error", "Unable to load main panel");
       return -1;
-    }
+    }  
     
     status = DisplayPanel (main_ph);
     if (status < 0)
@@ -69,13 +69,13 @@ int main (int argc, char *argv[])
     srand (time (NULL));  // Start pseudo randomly
     
     // Start with a specific piece for testing purposes
-    //srand (1);   // 1  -> O piece
-    //srand (5);   // 5  -> I piece
-    //srand (7);   // 7  -> Z piece
-    //srand (8);   // 8  -> J piece
-    //srand (9);   // 9  -> S piece
-    //srand (12);  // 12 -> T piece
-    //srand (13);  // 13 -> L piece
+    //srand (1);   // O piece
+    //srand (5);   // I piece
+    //srand (7);   // Z piece
+    //srand (8);   // J piece
+    //srand (9);   // S piece
+    //srand (12);  // T piece
+    //srand (13);  // L piece
     
     RunUserInterface ();
         
@@ -1954,7 +1954,7 @@ int CVICALLBACK CB_BtnStart (int panel, int control, int event,
             // Start advancing blocks
             SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_ENABLED, 1);
             
-            SetActiveCtrl (main_ph, PNLMAIN_BTNROTATECW);
+            SetActiveCtrl (main_ph, PNLMAIN_BTNPAUSE);
 
             break;
     }
@@ -2288,5 +2288,3 @@ int SpawnBlock (void)
     return game_status;
     
 }  // End of SpawnBlock()
-
-
