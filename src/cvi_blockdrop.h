@@ -3,7 +3,7 @@
 // Title:       cvi_blockdrop.h
 // Purpose:     A block drop puzzle game written for LabWindows/CVI.
 //
-// Created on:  4/17/2022 at 11:13:42 AM by Darren Cardenas
+// Created on:  4/17/2022 by Darren Cardenas
 //
 //==============================================================================
 
@@ -31,7 +31,7 @@ char *void;
 //==============================================================================
 // Constants
         
-#define DROP_DELAY              0.4  // seconds
+#define DROP_DELAY              0.2  // seconds
 
 // Sound effects
 #define FOLDER_SFX              "sfx\\"
@@ -45,6 +45,7 @@ char *void;
 #define GRID_NUM_COLS           10
             
 // Blocks 
+#define BLOCK_RANDOM            'R'
 #define BLOCK_I                 'I'
 #define BLOCK_J                 'J'
 #define BLOCK_L                 'L'
@@ -52,8 +53,9 @@ char *void;
 #define BLOCK_S                 'S'
 #define BLOCK_T                 'T'
 #define BLOCK_Z                 'Z'  
-#define NUM_BLOCKS_TYPES        7        
+#define NUM_BLOCKS_TYPES        7  // Exclude random      
 #define NUM_SQUARES_PER_BLOCK   4
+#define START_BLOCK             BLOCK_RANDOM
         
 // Orientation
 #define ORIENTATION_1           1  // Spawn orientation

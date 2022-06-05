@@ -3,7 +3,7 @@
 // Title:       cvi_blockdrop.c
 // Purpose:     A block drop puzzle game written for LabWindows/CVI.
 //
-// Created on:  4/17/2022 at 11:13:42 AM by Darren Cardenas
+// Created on:  4/17/2022 by Darren Cardenas
 //
 //==============================================================================
 
@@ -54,35 +54,55 @@ int main (int argc, char *argv[])
     main_ph = LoadPanelEx (0, "cvi_blockdrop_UIR.uir", PNLMAIN, __CVIUserHInst);    
     if (main_ph <= 0)
     {
-      MessagePopup ("Error", "Unable to load main panel");
-      return -1;
+        MessagePopup ("Error", "Unable to load main panel");
+        return -1;
     }  
     
     status = DisplayPanel (main_ph);
     if (status < 0)
     {
-      MessagePopup ("Error", "Unable to display main panel");
-      return -1;   
+        MessagePopup ("Error", "Unable to display main panel");
+        return -1;   
     }
     
-    // Set seed for random number generator
-    srand (time (NULL));  // Start pseudo randomly
-    
-    // Start with a specific piece for testing purposes
-    //srand (1);   // O piece
-    //srand (5);   // I piece
-    //srand (7);   // Z piece
-    //srand (8);   // J piece
-    //srand (9);   // S piece
-    //srand (12);  // T piece
-    //srand (13);  // L piece
+    switch (START_BLOCK)
+    {
+        case BLOCK_RANDOM:
+            // Set seed for random number generator
+            srand (time (NULL));  // Start pseudo randomly
+            break;
+        case BLOCK_O:
+            srand (1);
+            break;
+        case BLOCK_I:
+            srand (5);
+            break;
+        case BLOCK_Z:
+            srand (7);
+            break;          
+        case BLOCK_J:
+            srand (8);
+            break;          
+        case BLOCK_S:
+            srand (9);
+            break;          
+        case BLOCK_T:
+            srand (12);
+            break;          
+        case BLOCK_L:
+            srand (13);
+            break;                    
+        default:
+            MessagePopup ("Error", "Unknown start block");
+            return -1; 
+    }
     
     RunUserInterface ();
         
     if (main_ph > 0)
     {
-      DiscardPanel (main_ph);
-      main_ph = 0;
+        DiscardPanel (main_ph);
+        main_ph = 0;
     }
     
     return 0;

@@ -20,14 +20,14 @@
 #define  PNLMAIN_BTNPAUSE                 5       /* control type: command, callback function: CB_BtnPause */
 #define  PNLMAIN_BTNHARDDROP              6       /* control type: command, callback function: CB_BtnHardDrop */
 #define  PNLMAIN_BTNDOWN                  7       /* control type: command, callback function: CB_BtnMoveDown */
-#define  PNLMAIN_BTNRIGHT                 8       /* control type: command, callback function: CB_BtnMoveRight */
-#define  PNLMAIN_BTNLEFT                  9       /* control type: command, callback function: CB_BtnMoveLeft */
-#define  PNLMAIN_BTNROTATECCW             10      /* control type: command, callback function: CB_BtnRotateCCW */
-#define  PNLMAIN_BTNROTATECW              11      /* control type: command, callback function: CB_BtnRotateCW */
-#define  PNLMAIN_TEXTLOG                  12      /* control type: textBox, callback function: (none) */
-#define  PNLMAIN_TIMERADVANCE             13      /* control type: timer, callback function: CB_TimerAdvanceBlock */
-#define  PNLMAIN_TEXTGAMEOVER             14      /* control type: textMsg, callback function: (none) */
-#define  PNLMAIN_NUMCLEARED               15      /* control type: numeric, callback function: (none) */
+#define  PNLMAIN_TEXTLOG                  8       /* control type: textBox, callback function: (none) */
+#define  PNLMAIN_TIMERADVANCE             9       /* control type: timer, callback function: CB_TimerAdvanceBlock */
+#define  PNLMAIN_TEXTGAMEOVER             10      /* control type: textMsg, callback function: (none) */
+#define  PNLMAIN_NUMCLEARED               11      /* control type: numeric, callback function: (none) */
+#define  PNLMAIN_BTNLEFT                  12      /* control type: pictButton, callback function: CB_BtnMoveLeft */
+#define  PNLMAIN_BTNRIGHT                 13      /* control type: pictButton, callback function: CB_BtnMoveRight */
+#define  PNLMAIN_BTNROTATECCW             14      /* control type: pictButton, callback function: CB_BtnRotateCCW */
+#define  PNLMAIN_BTNROTATECW              15      /* control type: pictButton, callback function: CB_BtnRotateCW */
 
 
      /* Control Arrays: */
