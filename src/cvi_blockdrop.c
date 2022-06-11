@@ -156,7 +156,7 @@ int AdvanceBlock (void)
         CheckForLineClears ();
         
         // Spawn a new block       
-        game_status = SpawnBlock ();
+        game_status = SpawnBlock (FIRST_BLOCK_NO);
         
         if (game_status == GAME_END)
         {
@@ -212,34 +212,6 @@ int AdvanceBlock (void)
     return 0;    
 
 }  // End of AdvanceBlock()
-
-
-int CVICALLBACK CB_BtnHardDrop (int panel, int control, int event,
-                                void *callbackData, int eventData1, int eventData2)
-{
-    switch (event)
-    {
-        case EVENT_COMMIT:
-
-            break;
-    }
-    return 0;
-    
-}  // End of CB_BtnHardDrop()
-
-
-int CVICALLBACK CB_BtnMoveDown (int panel, int control, int event,
-                                void *callbackData, int eventData1, int eventData2)
-{
-    switch (event)
-    {
-        case EVENT_COMMIT:
-
-            break;
-    }
-    return 0;
-    
-}  // End of CB_BtnMoveDown()
 
 
 int CVICALLBACK CB_BtnMoveLeft (int panel, int control, int event,
@@ -1966,7 +1938,7 @@ int CVICALLBACK CB_BtnStart (int panel, int control, int event,
             
             SetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, 0);
             
-            SpawnBlock ();
+            SpawnBlock (FIRST_BLOCK_YES);
             
             // Set drop speed
             SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, DROP_DELAY);
@@ -2113,10 +2085,11 @@ int ClearGrid (void)
 }  // End of ClearGrid()
 
 
-int SpawnBlock (void)
+int SpawnBlock (int first_block)
 {
+    // Ensure S and Z blocks are at end of array
     char blocks[NUM_BLOCKS_TYPES] = {BLOCK_I, BLOCK_J, BLOCK_L, BLOCK_O,
-                                     BLOCK_S, BLOCK_T, BLOCK_Z};
+                                     BLOCK_T, BLOCK_S, BLOCK_Z};
     
     char msg[512] = "\0";
   
@@ -2124,9 +2097,17 @@ int SpawnBlock (void)
     int color = VAL_WHITE;
     int game_status = GAME_RUN;
     int ii = 0;  // Loop iterator    
-  
-    // Generate a random block
-    block_index = rand () % NUM_BLOCKS_TYPES;
+      
+    if (first_block == FIRST_BLOCK_YES)
+    {   
+        // Avoid S and Z blocks on the first block
+        block_index = rand () % (NUM_BLOCKS_TYPES - 2);
+    }
+    else
+    {
+        // Generate a random block
+        block_index = rand () % NUM_BLOCKS_TYPES;
+    }
     block.type = blocks[block_index];
 
     //sprintf (msg, "Spawn block: %c\n", block.type);

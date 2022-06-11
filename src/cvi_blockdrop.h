@@ -31,7 +31,7 @@ char *void;
 //==============================================================================
 // Constants
         
-#define DROP_DELAY              0.2  // seconds
+#define DROP_DELAY              0.4  // seconds
 
 // Sound effects
 #define FOLDER_SFX              "sfx\\"
@@ -53,9 +53,11 @@ char *void;
 #define BLOCK_S                 'S'
 #define BLOCK_T                 'T'
 #define BLOCK_Z                 'Z'  
-#define NUM_BLOCKS_TYPES        7  // Exclude random      
+#define NUM_BLOCKS_TYPES        7  // Exclude random block    
 #define NUM_SQUARES_PER_BLOCK   4
 #define START_BLOCK             BLOCK_RANDOM
+#define FIRST_BLOCK_NO          0
+#define FIRST_BLOCK_YES         1
         
 // Orientation
 #define ORIENTATION_1           1  // Spawn orientation
@@ -95,7 +97,7 @@ typedef struct
 
 int CheckForLineClears (void);
 int ClearGrid (void);
-int SpawnBlock (void);
+int SpawnBlock (int first_block);
 int AdvanceBlock (void);
 
 #ifdef __cplusplus

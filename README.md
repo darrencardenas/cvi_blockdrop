@@ -1,5 +1,5 @@
 # CVI Blockdrop
-This is a block drop puzzle game written for LabWindows/CVI. It has been developed on LabWindows/CVI version 2020.
+This is a block drop puzzle game written for LabWindows/CVI 2020.
 
 <p align="center">
 <img src="reference_diagrams/cvi_blockdrop.png" alt="CVI Blockdrop Screenshot"/>

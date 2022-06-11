@@ -58,9 +58,9 @@ Batch Build Debug = False
 [File 0001]
 Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.h"
 File Type = "Include"
-Disk Date = 3737283020
+Disk Date = 3737283987
 In Projects = "1,"
-Source Window State = "1,33,33,33,35,35,35,0,0,0,0,0,0,0,0,0,25,0,33,35,400,600,1,0,"
+Source Window State = "1,21,21,21,15,15,15,0,0,0,0,0,0,0,0,0,0,0,21,15,400,600,1,0,"
 Window Top = 31
 Window Z-Order = 2
 
@@ -80,17 +80,17 @@ Window Top = 64
 Window Left = 26
 Window Height = 281
 Window Width = 630
-Window Z-Order = 1
+Window Z-Order = 3
 
 [File 0004]
 Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.c"
 File Type = "CSource"
 Disk Date = 3737282862
 In Projects = "1,"
-Source Window State = "1,5,5,5,26,26,26,0,0,0,0,0,0,0,0,0,0,0,5,26,400,600,1,0,"
+Source Window State = "1,89,89,89,23,23,23,0,0,0,0,0,0,0,0,0,0,0,89,23,400,600,1,0,"
 Line Tags = "98,"
 Window Top = 31
-Window Z-Order = 3
+Window Z-Order = 1
 
 [File 0005]
 Path = "/c/Users/darre/Downloads/TestKeyUp/TestKeyUp/TestKeyUp.c"
