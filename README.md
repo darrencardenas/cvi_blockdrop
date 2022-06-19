@@ -10,21 +10,19 @@ This is a block drop puzzle game written for LabWindows/CVI 2020.
 This game uses a table control as the playing area. The background color of each cell is set to form the individual blocks.
 
 
-## Controls
-- Start game: ENTER
-- Move left: LEFT ARROW
-- Move right: RIGHT ARROW
+## Keyboard Controls
+- Start Game: ENTER
+- Move Left: LEFT ARROW
+- Move Right: RIGHT ARROW
+- Soft Drop: DOWN ARROW
 - Rotate Clockwise: UP ARROW
 - Rotate Counter-Clockwise: ESC
 
-## Implemented
-- Line clears
+
+## Features
+- Line clear counter
 - Sound effects
 - Game over screen
-
-## To Do
-- Soft drop
-- Hard drop
 
 
 

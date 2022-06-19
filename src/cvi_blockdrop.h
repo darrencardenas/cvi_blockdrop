@@ -31,7 +31,9 @@ char *void;
 //==============================================================================
 // Constants
         
-#define DROP_DELAY              0.4  // seconds
+// Block speed
+#define NORMAL_SPEED            0.4  // seconds, timer tick interval
+#define SOFTDROP_SPEED          0.1  // seconds, timer tick interval
 
 // Sound effects
 #define FOLDER_SFX              "sfx\\"
@@ -95,9 +97,18 @@ typedef struct
 //==============================================================================
 // Global functions
 
+int CVICALLBACK CB_KeyDown (int panelHandle, int message, unsigned int* wParam, 
+                            unsigned int* lParam, void* callbackData);
+
+int CVICALLBACK CB_KeyUp (int panelHandle, int message, unsigned int* wParam, 
+                          unsigned int* lParam, void* callbackData);
+
 int CheckForLineClears (void);
+
 int ClearGrid (void);
+
 int SpawnBlock (int first_block);
+
 int AdvanceBlock (void);
 
 #ifdef __cplusplus

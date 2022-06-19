@@ -22,10 +22,11 @@
 #define  PNLMAIN_TIMERADVANCE             7       /* control type: timer, callback function: CB_TimerAdvanceBlock */
 #define  PNLMAIN_TEXTGAMEOVER             8       /* control type: textMsg, callback function: (none) */
 #define  PNLMAIN_NUMCLEARED               9       /* control type: numeric, callback function: (none) */
-#define  PNLMAIN_BTNLEFT                  10      /* control type: pictButton, callback function: CB_BtnMoveLeft */
-#define  PNLMAIN_BTNRIGHT                 11      /* control type: pictButton, callback function: CB_BtnMoveRight */
-#define  PNLMAIN_BTNROTATECCW             12      /* control type: pictButton, callback function: CB_BtnRotateCCW */
-#define  PNLMAIN_BTNROTATECW              13      /* control type: pictButton, callback function: CB_BtnRotateCW */
+#define  PNLMAIN_BTNDOWN                  10      /* control type: pictButton, callback function: CB_BtnMoveDown */
+#define  PNLMAIN_BTNLEFT                  11      /* control type: pictButton, callback function: CB_BtnMoveLeft */
+#define  PNLMAIN_BTNRIGHT                 12      /* control type: pictButton, callback function: CB_BtnMoveRight */
+#define  PNLMAIN_BTNROTATECCW             13      /* control type: pictButton, callback function: CB_BtnRotateCCW */
+#define  PNLMAIN_BTNROTATECW              14      /* control type: pictButton, callback function: CB_BtnRotateCW */
 
 
      /* Control Arrays: */
@@ -40,6 +41,7 @@
 
      /* Callback Prototypes: */
 
+int  CVICALLBACK CB_BtnMoveDown(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 int  CVICALLBACK CB_BtnMoveLeft(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 int  CVICALLBACK CB_BtnMoveRight(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 int  CVICALLBACK CB_BtnPause(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);

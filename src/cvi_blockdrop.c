@@ -20,23 +20,26 @@
 
 //==============================================================================
 // Static global variables
+static int main_ph = 0;  // Main panel handle
+
+static blockData block = {0};
+
+static CmtThreadLockHandle threadLock = 0;
+
+static int g_keydown = 0;
 
 //==============================================================================
 // Static functions
 
 //==============================================================================
 // Global variables
-int main_ph = 0;  // Main panel handle
-
-blockData block = {0};
-
-CmtThreadLockHandle threadLock = 0;
 
 //==============================================================================
 // Global functions
 
 int main (int argc, char *argv[])
 {
+    int postinghandle;
     int status = 0;
     
     if (InitCVIRTE (0, argv, 0) == 0)
@@ -57,6 +60,10 @@ int main (int argc, char *argv[])
         MessagePopup ("Error", "Unable to load main panel");
         return -1;
     }  
+    
+    // Monitor down-arrow for keypresses
+    InstallWinMsgCallback (main_ph, WM_KEYDOWN, CB_KeyDown, VAL_MODE_IN_QUEUE, NULL, &postinghandle);    
+    InstallWinMsgCallback (main_ph, WM_KEYUP, CB_KeyUp, VAL_MODE_IN_QUEUE, NULL, &postinghandle);    
     
     status = DisplayPanel (main_ph);
     if (status < 0)
@@ -174,6 +181,7 @@ int AdvanceBlock (void)
             SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 1);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 1);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 1);
+            SetCtrlAttribute (main_ph, PNLMAIN_BTNDOWN, ATTR_DIMMED, 1);
         }
         else
         {        
@@ -212,6 +220,27 @@ int AdvanceBlock (void)
     return 0;    
 
 }  // End of AdvanceBlock()
+
+
+int CVICALLBACK CB_BtnMoveDown (int panel, int control, int event,
+                                void *callbackData, int eventData1, int eventData2)
+{
+    switch (event)
+    {
+        case EVENT_LEFT_CLICK:
+        
+            if (g_keydown == 0)
+            {
+                // new keypress
+                SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, "Click DOWN\n");
+                // set the keydown flag
+                g_keydown = 1;
+            }            
+
+            break;
+    }
+    return 0;
+}
 
 
 int CVICALLBACK CB_BtnMoveLeft (int panel, int control, int event,
@@ -394,6 +423,7 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNSTART, ATTR_DIMMED, 1);
+                SetCtrlAttribute (main_ph, PNLMAIN_BTNDOWN, ATTR_DIMMED, 1);
                 paused = 1;
             }
             else
@@ -405,6 +435,7 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNSTART, ATTR_DIMMED, 0);
+                SetCtrlAttribute (main_ph, PNLMAIN_BTNDOWN, ATTR_DIMMED, 0);
                 paused = 0;
             }            
             break;
@@ -1935,13 +1966,14 @@ int CVICALLBACK CB_BtnStart (int panel, int control, int event,
             SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 0);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNLEFT, ATTR_DIMMED, 0);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 0);
+            SetCtrlAttribute (main_ph, PNLMAIN_BTNDOWN, ATTR_DIMMED, 0);
             
             SetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, 0);
             
             SpawnBlock (FIRST_BLOCK_YES);
             
             // Set drop speed
-            SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, DROP_DELAY);
+            SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, NORMAL_SPEED);
             
             // Start advancing blocks
             SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_ENABLED, 1);
@@ -1953,6 +1985,41 @@ int CVICALLBACK CB_BtnStart (int panel, int control, int event,
     return 0;
     
 }  // End of CB_BtnStart()
+
+
+int CVICALLBACK CB_KeyDown (int panelHandle, int message, unsigned int* wParam, 
+                            unsigned int* lParam, void* callbackData)
+{
+    // Monitor down-arrow key for press
+    if ((g_keydown == 0) && (*wParam == VK_DOWN))
+    {      
+        // Increase block speed
+        SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, SOFTDROP_SPEED);
+        
+        SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, "VK_DOWN DOWN\n");
+
+        g_keydown = 1;
+    }      
+    
+    return 0;
+}  // End of CB_KeyDown()
+
+
+int CVICALLBACK CB_KeyUp (int panelHandle, int message, unsigned int* wParam, 
+                          unsigned int* lParam, void* callbackData)
+{
+    // Monitor down-arrow key for release
+    if (*wParam == VK_DOWN)
+    {        
+        // Revert block speed
+        SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, NORMAL_SPEED);
+        
+        SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, "VK_DOWN UP\n");
+        
+        g_keydown = 0;
+    }
+    return 0;
+}  // End of CB_KeyUp()
 
 
 int CVICALLBACK CB_TimerAdvanceBlock (int panel, int control, int event,
