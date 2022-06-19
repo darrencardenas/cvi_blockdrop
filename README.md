@@ -7,7 +7,8 @@ This is a block drop puzzle game written for LabWindows/CVI 2020.
 
 
 ## Introduction
-This game uses a table control as the playing area. The background color of each cell is set to form the individual blocks.
+This game uses a table control as the playing area. The background color of each cell is set to form the individual blocks. 
+A timer control is used to update block positions.
 
 
 ## Keyboard Controls

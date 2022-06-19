@@ -228,19 +228,26 @@ int CVICALLBACK CB_BtnMoveDown (int panel, int control, int event,
     switch (event)
     {
         case EVENT_LEFT_CLICK:
-        
-            if (g_keydown == 0)
-            {
-                // new keypress
-                SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, "Click DOWN\n");
-                // set the keydown flag
-                g_keydown = 1;
-            }            
-
+                        
+            // Increase block speed
+            SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, SOFTDROP_SPEED);
+            
+            SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, "Mouse DOWN\n");
+          
             break;
+            
+        case EVENT_LEFT_CLICK_UP:
+        
+            // Revert block speed
+            SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, NORMAL_SPEED);
+            
+            SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, "Mouse UP\n");
+
+            break;            
     }
     return 0;
-}
+    
+}  // End of CB_BtnMoveDown()
 
 
 int CVICALLBACK CB_BtnMoveLeft (int panel, int control, int event,
