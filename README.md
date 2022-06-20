@@ -16,8 +16,9 @@ A timer control is used to update block positions.
 - Move Left: LEFT ARROW
 - Move Right: RIGHT ARROW
 - Soft Drop: DOWN ARROW
-- Rotate Clockwise: UP ARROW
-- Rotate Counter-Clockwise: ESC
+- Rotate Clockwise: UP ARROW or X
+- Rotate Counter-Clockwise: CTRL or Z
+- Pause: ESC or F1
 
 
 ## Features

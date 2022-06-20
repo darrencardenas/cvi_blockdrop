@@ -9,10 +9,9 @@ IVI Standard Root Dir = "/c/Program Files/IVI Foundation/IVI"
 IVI Standard Root 64-bit Dir = "/C/Program Files/IVI Foundation/IVI"
 VXIplug&play Framework Dir = "/C/Program Files (x86)/IVI Foundation/VISA/winnt"
 VXIplug&play Framework 64-bit Dir = "/C/Program Files/IVI Foundation/VISA/win64"
-Number of Projects = 2
+Number of Projects = 1
 Active Project = 1
 Project 0001 = "cvi_blockdrop.prj"
-Project 0002 = "/c/Users/darre/Downloads/TestKeyUp/TestKeyUp/TestKeyUp.prj"
 Drag Bar Left = 282
 Window Top = 80
 Window Left = 613
@@ -31,7 +30,7 @@ Save Changes Before Compiling = "Always"
 Hide Windows = False
 Break At First Statement = False
 Sort Type = "File Name"
-Number of Opened Files = 3
+Number of Opened Files = 0
 Window Confinement Region Enabled = True
 MainColumnWidth = 265
 FileDateColumnWidth = 70
@@ -46,73 +45,40 @@ Warn User If Debugging Release = 1
 Batch Build Release = False
 Batch Build Debug = False
 
-[Project Header 0002]
-Version = 2000
-Don't Update DistKit = False
-Platform Code = 4
-Build Configuration = "Debug"
-Warn User If Debugging Release = 1
-Batch Build Release = False
-Batch Build Debug = False
-
 [File 0001]
 Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.h"
 File Type = "Include"
-Disk Date = 3737283987
+Disk Date = 3738609091
 In Projects = "1,"
-Source Window State = "1,21,21,21,15,15,15,0,0,0,0,0,0,0,0,0,0,0,21,15,400,600,1,0,"
+Source Window State = "1,58,58,58,33,33,33,0,0,0,0,0,0,0,0,0,0,0,58,33,400,600,1,0,"
 Window Top = 31
-Window Z-Order = 2
 
 [File 0002]
-Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop_UIR.h"
-File Type = "Include"
-Disk Date = 3737281780
-In Projects = "1,"
-Source Window State = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"
-
-[File 0003]
 Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop_UIR.uir"
 File Type = "User Interface Resource"
-Disk Date = 3737281780
+Disk Date = 3738606088
 In Projects = "1,"
 Window Top = 64
 Window Left = 26
 Window Height = 281
 Window Width = 630
-Window Z-Order = 3
 
-[File 0004]
+[File 0003]
 Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.c"
 File Type = "CSource"
-Disk Date = 3737282862
+Disk Date = 3738609299
 In Projects = "1,"
-Source Window State = "1,89,89,89,23,23,23,0,0,0,0,0,0,0,0,0,0,0,89,23,400,600,1,0,"
-Line Tags = "98,"
-Window Top = 31
-Window Z-Order = 1
+Source Window State = "1,2201,2201,2201,31,31,31,0,0,0,0,0,0,0,0,0,2152,0,2201,31,401,630,1,0,"
+Line Tags = "2159,"
+Window Top = 33
+Window Left = 10
 
-[File 0005]
-Path = "/c/Users/darre/Downloads/TestKeyUp/TestKeyUp/TestKeyUp.c"
-File Type = "CSource"
-Disk Date = 3735412227
-In Projects = "2,"
-Source Window State = "1,40,40,40,34,34,34,0,0,0,0,0,0,0,0,0,35,0,40,34,400,600,0,0,"
-
-[File 0006]
-Path = "/c/Users/darre/Downloads/TestKeyUp/TestKeyUp/TestKeyUp.uir"
-File Type = "User Interface Resource"
-Disk Date = 3735412227
-In Projects = "2,"
-Window Top = 219
-Window Left = 106
-Window Height = 401
-Window Width = 630
-
-[Tab Order]
-Tab 0001 = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.h"
-Tab 0002 = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.c"
-Tab 0003 = "/c/projects/cvi_blockdrop/src/cvi_blockdrop_UIR.uir"
+[File 0004]
+Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop_UIR.h"
+File Type = "Include"
+Disk Date = 3738172288
+In Projects = "1,"
+Source Window State = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"
 
 [Default Build Config 0001 Debug]
 Generate Browse Info = True
@@ -198,94 +164,6 @@ Always show confirmation dialog = True
 External Process Path = ""
 
 [Command Line Args 0001]
-Command Line Args = ""
-Working Directory = ""
-Environment Options = ""
-
-[Default Build Config 0002 Debug]
-Generate Browse Info = True
-Enable Uninitialized Locals Runtime Warning = True
-Batch Build = False
-Profile = "Disabled"
-Debugging Level = "Standard"
-Execution Trace = "Disabled"
-Command Line Args = ""
-Working Directory = ""
-Environment Options = ""
-External Process Path = ""
-
-[Default Build Config 0002 Release]
-Generate Browse Info = True
-Enable Uninitialized Locals Runtime Warning = True
-Batch Build = False
-Profile = "Disabled"
-Debugging Level = "Standard"
-Execution Trace = "Disabled"
-Command Line Args = ""
-Working Directory = ""
-Environment Options = ""
-External Process Path = ""
-
-[Default Build Config 0002 Debug64]
-Generate Browse Info = True
-Enable Uninitialized Locals Runtime Warning = True
-Batch Build = False
-Profile = "Disabled"
-Debugging Level = "Standard"
-Execution Trace = "Disabled"
-Command Line Args = ""
-Working Directory = ""
-Environment Options = ""
-External Process Path = ""
-
-[Default Build Config 0002 Release64]
-Generate Browse Info = True
-Enable Uninitialized Locals Runtime Warning = True
-Batch Build = False
-Profile = "Disabled"
-Debugging Level = "Standard"
-Execution Trace = "Disabled"
-Command Line Args = ""
-Working Directory = ""
-Environment Options = ""
-External Process Path = ""
-
-[Build Dependencies 0002]
-Number of Dependencies = 0
-
-[Build Options 0002]
-Generate Browse Info = True
-Enable Uninitialized Locals Runtime Warning = True
-Execution Trace = "Disabled"
-Profile = "Disabled"
-Debugging Level = "Standard"
-Break On Library Errors = True
-Break On First Chance Exceptions = False
-
-[Execution Target 0002]
-Execution Target Address = "Local desktop computer"
-Execution Target Port = 0
-Execution Target Type = 0
-
-[SCC Options 0002]
-Use global settings = True
-SCC Provider = ""
-SCC Project = ""
-Local Path = ""
-Auxiliary Path = ""
-Perform Same Action For .h File As For .uir File = "Ask"
-Perform Same Action For .cds File As For .prj File = "Ask"
-Username = ""
-Comment = ""
-Use Default Username = False
-Use Default Comment = False
-Suppress CVI Error Messages = False
-Always show confirmation dialog = True
-
-[DLL Debugging Support 0002]
-External Process Path = ""
-
-[Command Line Args 0002]
 Command Line Args = ""
 Working Directory = ""
 Environment Options = ""

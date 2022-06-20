@@ -72,38 +72,6 @@ int main (int argc, char *argv[])
         return -1;   
     }
     
-    switch (START_BLOCK)
-    {
-        case BLOCK_RANDOM:
-            // Set seed for random number generator
-            srand (time (NULL));  // Start pseudo randomly
-            break;
-        case BLOCK_O:
-            srand (1);
-            break;
-        case BLOCK_I:
-            srand (5);
-            break;
-        case BLOCK_Z:
-            srand (7);
-            break;          
-        case BLOCK_J:
-            srand (8);
-            break;          
-        case BLOCK_S:
-            srand (9);
-            break;          
-        case BLOCK_T:
-            srand (12);
-            break;          
-        case BLOCK_L:
-            srand (13);
-            break;                    
-        default:
-            MessagePopup ("Error", "Unknown start block");
-            return -1; 
-    }
-    
     RunUserInterface ();
         
     if (main_ph > 0)
@@ -845,7 +813,7 @@ int CVICALLBACK CB_BtnRotateCCW (int panel, int control, int event,
                     else if (block.orientation == ORIENTATION_4)
                     {
                         // Check for grid edge clearances
-                        if (block.position[2].x == 1)
+                        if (block.position[2].x == 2)
                         {
                             break;
                         }
@@ -2006,7 +1974,22 @@ int CVICALLBACK CB_KeyDown (int panelHandle, int message, unsigned int* wParam,
         SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, "VK_DOWN DOWN\n");
 
         g_keydown = 1;
-    }      
+    }   
+    // Monitor for CCW rotation
+    else if ((g_keydown == 0) && ((*wParam == 'Z') || (*wParam == VK_CONTROL)))
+    {
+        CallCtrlCallback (main_ph, PNLMAIN_BTNROTATECCW, EVENT_COMMIT, 0, 0, 0);            
+    }
+    // Monitor for CW rotation
+    else if ((g_keydown == 0) && (*wParam == 'X'))
+    {
+        CallCtrlCallback (main_ph, PNLMAIN_BTNROTATECW, EVENT_COMMIT, 0, 0, 0);            
+    }    
+    // Monitor for pause
+    else if ((g_keydown == 0) && (*wParam == VK_F1))
+    {
+        CallCtrlCallback (main_ph, PNLMAIN_BTNPAUSE, EVENT_COMMIT, 0, 0, 0);
+    } 
     
     return 0;
 }  // End of CB_KeyDown()
@@ -2172,11 +2155,51 @@ int SpawnBlock (int first_block)
     int game_status = GAME_RUN;
     int ii = 0;  // Loop iterator    
       
-    if (first_block == FIRST_BLOCK_YES)
+    // Random first block
+    if ((first_block == FIRST_BLOCK_YES) && (START_BLOCK == BLOCK_RANDOM))
     {   
         // Avoid S and Z blocks on the first block
         block_index = rand () % (NUM_BLOCKS_TYPES - 2);
     }
+    // Selective first block for debugging
+    else if (first_block == FIRST_BLOCK_YES)
+    {
+        switch (START_BLOCK)
+        {
+            case BLOCK_O:
+                srand (1);
+                block_index = 3;
+                break;
+            case BLOCK_I:
+                srand (5);
+                block_index = 0;
+                break;
+            case BLOCK_Z:
+                srand (7);
+                block_index = 6;
+                break;          
+            case BLOCK_J:
+                srand (8);
+                block_index = 1;
+                break;          
+            case BLOCK_S:
+                srand (9);
+                block_index = 5;
+                break;          
+            case BLOCK_T:
+                srand (12);
+                block_index = 4;
+                break;          
+            case BLOCK_L:
+                srand (13);
+                block_index = 2;
+                break;                    
+            default:
+                MessagePopup ("Error", "Unknown start block");
+                return -1; 
+        }
+    }
+    // Random subsequent blocks
     else
     {
         // Generate a random block
