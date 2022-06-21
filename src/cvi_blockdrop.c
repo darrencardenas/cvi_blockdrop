@@ -28,6 +28,8 @@ static CmtThreadLockHandle threadLock = 0;
 
 static int g_keydown = 0;
 
+static double g_speed = NORMAL_SPEED;
+
 //==============================================================================
 // Static functions
 
@@ -207,7 +209,7 @@ int CVICALLBACK CB_BtnMoveDown (int panel, int control, int event,
         case EVENT_LEFT_CLICK_UP:
         
             // Revert block speed
-            SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, NORMAL_SPEED);
+            SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, g_speed);
             
             SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, "Mouse UP\n");
 
@@ -1943,12 +1945,14 @@ int CVICALLBACK CB_BtnStart (int panel, int control, int event,
             SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 0);
             SetCtrlAttribute (main_ph, PNLMAIN_BTNDOWN, ATTR_DIMMED, 0);
             
+            SetCtrlVal (main_ph, PNLMAIN_LEVEL, 1);
             SetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, 0);
             
             SpawnBlock (FIRST_BLOCK_YES);
             
             // Set drop speed
-            SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, NORMAL_SPEED);
+            g_speed = NORMAL_SPEED;
+            SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, g_speed);
             
             // Start advancing blocks
             SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_ENABLED, 1);
@@ -2002,7 +2006,7 @@ int CVICALLBACK CB_KeyUp (int panelHandle, int message, unsigned int* wParam,
     if (*wParam == VK_DOWN)
     {        
         // Revert block speed
-        SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, NORMAL_SPEED);
+        SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, g_speed);
         
         SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, "VK_DOWN UP\n");
         
@@ -2036,6 +2040,7 @@ int CheckForLineClears (void)
     int ii = 0;  // Loop iterator
     int jj = 0;  // Loop iterator
     int kk = 0;  // Loop iterator
+    int level = 0;
     int numLineClearsTotal = 0;
     int numLineClears = 0;
     
@@ -2118,10 +2123,19 @@ int CheckForLineClears (void)
             
         }  // End loop through all rows to be cleared
     }
-        
-    GetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, &numLineClearsTotal);
     
-    SetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, numLineClearsTotal + numLineClears);
+    // Update number of lines cleared
+    GetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, &numLineClearsTotal);    
+    numLineClearsTotal += numLineClears;    
+    SetCtrlVal (main_ph, PNLMAIN_NUMCLEARED, numLineClearsTotal);
+    
+    // Update level
+    level = (numLineClearsTotal / 10) + 1;
+    SetCtrlVal (main_ph, PNLMAIN_LEVEL, level);
+    
+    // Update block speed
+    g_speed = NORMAL_SPEED - ((level - 1) * LEVEL_SPEEDUP);
+    SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_INTERVAL, g_speed);
     
     sprintf (msg, "Line check done\n");
     SetCtrlVal (main_ph, PNLMAIN_TEXTLOG, msg);
@@ -2158,6 +2172,9 @@ int SpawnBlock (int first_block)
     // Random first block
     if ((first_block == FIRST_BLOCK_YES) && (START_BLOCK == BLOCK_RANDOM))
     {   
+        // Start pseudo randomly
+        srand (time (NULL));  
+        
         // Avoid S and Z blocks on the first block
         block_index = rand () % (NUM_BLOCKS_TYPES - 2);
     }
@@ -2167,31 +2184,24 @@ int SpawnBlock (int first_block)
         switch (START_BLOCK)
         {
             case BLOCK_O:
-                srand (1);
                 block_index = 3;
                 break;
             case BLOCK_I:
-                srand (5);
                 block_index = 0;
                 break;
             case BLOCK_Z:
-                srand (7);
                 block_index = 6;
                 break;          
             case BLOCK_J:
-                srand (8);
                 block_index = 1;
                 break;          
             case BLOCK_S:
-                srand (9);
                 block_index = 5;
                 break;          
             case BLOCK_T:
-                srand (12);
                 block_index = 4;
                 break;          
             case BLOCK_L:
-                srand (13);
                 block_index = 2;
                 break;                    
             default:

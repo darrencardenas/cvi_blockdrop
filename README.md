@@ -22,7 +22,8 @@ A timer control is used to update block positions.
 
 
 ## Features
-- Line clear counter
+- Lines cleared counter
+- Level speed increase
 - Sound effects
 - Game over screen
 

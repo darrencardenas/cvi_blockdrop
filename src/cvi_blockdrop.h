@@ -32,8 +32,9 @@ char *void;
 // Constants
         
 // Block speed
-#define NORMAL_SPEED            0.4  // seconds, timer tick interval
-#define SOFTDROP_SPEED          0.1  // seconds, timer tick interval
+#define NORMAL_SPEED            0.4   // seconds, timer tick interval
+#define SOFTDROP_SPEED          0.1   // seconds, timer tick interval
+#define LEVEL_SPEEDUP           0.02  // seconds, speed increase every level
 
 // Sound effects
 #define FOLDER_SFX              "sfx\\"

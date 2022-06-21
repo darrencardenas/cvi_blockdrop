@@ -21,12 +21,13 @@
 #define  PNLMAIN_TEXTLOG                  6       /* control type: textBox, callback function: (none) */
 #define  PNLMAIN_TIMERADVANCE             7       /* control type: timer, callback function: CB_TimerAdvanceBlock */
 #define  PNLMAIN_TEXTGAMEOVER             8       /* control type: textMsg, callback function: (none) */
-#define  PNLMAIN_NUMCLEARED               9       /* control type: numeric, callback function: (none) */
-#define  PNLMAIN_BTNDOWN                  10      /* control type: pictButton, callback function: CB_BtnMoveDown */
-#define  PNLMAIN_BTNLEFT                  11      /* control type: pictButton, callback function: CB_BtnMoveLeft */
-#define  PNLMAIN_BTNRIGHT                 12      /* control type: pictButton, callback function: CB_BtnMoveRight */
-#define  PNLMAIN_BTNROTATECCW             13      /* control type: pictButton, callback function: CB_BtnRotateCCW */
-#define  PNLMAIN_BTNROTATECW              14      /* control type: pictButton, callback function: CB_BtnRotateCW */
+#define  PNLMAIN_LEVEL                    9       /* control type: numeric, callback function: (none) */
+#define  PNLMAIN_NUMCLEARED               10      /* control type: numeric, callback function: (none) */
+#define  PNLMAIN_BTNDOWN                  11      /* control type: pictButton, callback function: CB_BtnMoveDown */
+#define  PNLMAIN_BTNLEFT                  12      /* control type: pictButton, callback function: CB_BtnMoveLeft */
+#define  PNLMAIN_BTNRIGHT                 13      /* control type: pictButton, callback function: CB_BtnMoveRight */
+#define  PNLMAIN_BTNROTATECCW             14      /* control type: pictButton, callback function: CB_BtnRotateCCW */
+#define  PNLMAIN_BTNROTATECW              15      /* control type: pictButton, callback function: CB_BtnRotateCW */
 
 
      /* Control Arrays: */
