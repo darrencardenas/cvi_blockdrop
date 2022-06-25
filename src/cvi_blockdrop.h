@@ -88,8 +88,7 @@ typedef struct
     int num_left_points;
     Point left_points[NUM_SQUARES_PER_BLOCK];
     int num_right_points;
-    Point right_points[NUM_SQUARES_PER_BLOCK];
-        
+    Point right_points[NUM_SQUARES_PER_BLOCK];        
 } blockData;
         
 //==============================================================================

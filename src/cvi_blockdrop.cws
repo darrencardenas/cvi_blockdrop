@@ -48,9 +48,9 @@ Batch Build Debug = False
 [File 0001]
 Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.h"
 File Type = "Include"
-Disk Date = 3738692121
+Disk Date = 3739036983
 In Projects = "1,"
-Source Window State = "1,60,60,60,44,44,44,0,0,0,0,0,0,0,0,0,46,0,60,44,400,600,1,0,"
+Source Window State = "1,104,104,104,0,0,0,0,0,0,0,0,0,0,0,0,0,0,104,0,400,600,1,0,"
 Window Top = 31
 
 [File 0002]
@@ -66,9 +66,9 @@ Window Width = 630
 [File 0003]
 Path = "/c/projects/cvi_blockdrop/src/cvi_blockdrop.c"
 File Type = "CSource"
-Disk Date = 3738692162
+Disk Date = 3739037052
 In Projects = "1,"
-Source Window State = "1,2176,2176,2176,8,8,8,0,0,0,0,0,0,0,0,0,2191,0,2176,8,401,630,1,0,"
+Source Window State = "1,87,87,87,0,0,0,0,0,0,0,0,0,0,0,0,220,0,87,0,401,630,1,0,"
 Line Tags = "2134,2173,"
 Window Top = 33
 Window Left = 10

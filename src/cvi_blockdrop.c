@@ -63,7 +63,7 @@ int main (int argc, char *argv[])
         return -1;
     }  
     
-    // Monitor down-arrow for keypresses
+    // Monitor keyboard presses
     InstallWinMsgCallback (main_ph, WM_KEYDOWN, CB_KeyDown, VAL_MODE_IN_QUEUE, NULL, &postinghandle);    
     InstallWinMsgCallback (main_ph, WM_KEYUP, CB_KeyUp, VAL_MODE_IN_QUEUE, NULL, &postinghandle);    
     
