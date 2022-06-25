@@ -1,4 +1,4 @@
-# CVI Blockdrop
+# CVI Block Drop
 This is a block drop puzzle game written for LabWindows/CVI 2020.
 
 <p align="center">
