@@ -19,6 +19,7 @@ A timer control is used to update block positions.
 - Rotate Clockwise: UP ARROW or X
 - Rotate Counter-Clockwise: CTRL or Z
 - Pause: ESC or F1
+- Quit: CTRL+Q
 
 
 ## Features

@@ -226,7 +226,11 @@ int CVICALLBACK CB_BtnMoveLeft (int panel, int control, int event,
     int colors[NUM_SQUARES_PER_BLOCK] = { VAL_WHITE, VAL_WHITE, VAL_WHITE, VAL_WHITE };
     int gotLock = 0;
     int ii = 0;  // Loop iterator
+    int jj = 0;  // Loop iterator
+    int matchFound = 0;
     int moveBlock = 1;
+    int new_xvals[NUM_SQUARES_PER_BLOCK] = {0};
+    int new_yvals[NUM_SQUARES_PER_BLOCK] = {0};
     int status = 0;
     
     switch (event)
@@ -266,15 +270,41 @@ int CVICALLBACK CB_BtnMoveLeft (int panel, int control, int event,
                 return -1;
             }  
                        
-            // Move each block to the left
+            // Get new block positions
             for (ii=0; ii<NUM_SQUARES_PER_BLOCK; ii++)
-            {                         
-                SetTableCellAttribute (main_ph, PNLMAIN_GRID, block.position[ii], ATTR_TEXT_BGCOLOR, VAL_WHITE);
+            {                                        
+                new_xvals[ii] = block.position[ii].x-1;
+                new_yvals[ii] = block.position[ii].y;
+                block.position[ii] = MakePoint (new_xvals[ii], block.position[ii].y);
+            } 
+            
+            // Blank squares
+            for (ii=0; ii<NUM_SQUARES_PER_BLOCK; ii++)
+            {     
+                matchFound = 0;
                 
-                block.position[ii] = MakePoint (block.position[ii].x-1, block.position[ii].y);
+                // Avoid blanking squares that need coloring
+                for (jj=0; jj<NUM_SQUARES_PER_BLOCK; jj++)
+                {
+                    if (block.position[ii].x+1 == new_xvals[jj] &&
+                        block.position[ii].y == new_yvals[jj])
+                    {
+                        matchFound = 1;
+                    }
+                }                            
                 
+                if (matchFound == 0)
+                {
+                    SetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[ii].x+1, block.position[ii].y), 
+                                           ATTR_TEXT_BGCOLOR, VAL_WHITE);
+                }
+            } 
+            
+            // Color squares
+            for (ii=0; ii<NUM_SQUARES_PER_BLOCK; ii++)
+            {     
                 SetTableCellAttribute (main_ph, PNLMAIN_GRID, block.position[ii], ATTR_TEXT_BGCOLOR, block.color);
-            }   
+            }
             
             for (ii=0; ii<block.num_low_points; ii++)
             {
@@ -307,7 +337,11 @@ int CVICALLBACK CB_BtnMoveRight (int panel, int control, int event,
     int colors[NUM_SQUARES_PER_BLOCK] = { VAL_WHITE, VAL_WHITE, VAL_WHITE, VAL_WHITE };
     int gotLock = 0;
     int ii = 0;  // Loop iterator
+    int jj = 0;  // Loop iterator
+    int matchFound = 0;
     int moveBlock = 1;
+    int new_xvals[NUM_SQUARES_PER_BLOCK] = {0};
+    int new_yvals[NUM_SQUARES_PER_BLOCK] = {0};
     int status = 0;
     
     switch (event)
@@ -347,15 +381,41 @@ int CVICALLBACK CB_BtnMoveRight (int panel, int control, int event,
                 return -1;
             }            
                        
-            // Move each block to the right
+            // Get new block positions
             for (ii=0; ii<NUM_SQUARES_PER_BLOCK; ii++)
-            {                         
-                SetTableCellAttribute (main_ph, PNLMAIN_GRID, block.position[ii], ATTR_TEXT_BGCOLOR, VAL_WHITE);
+            {                                        
+                new_xvals[ii] = block.position[ii].x+1;
+                new_yvals[ii] = block.position[ii].y;
+                block.position[ii] = MakePoint (new_xvals[ii], block.position[ii].y);
+            } 
+            
+            // Blank squares
+            for (ii=0; ii<NUM_SQUARES_PER_BLOCK; ii++)
+            {     
+                matchFound = 0;
                 
-                block.position[ii] = MakePoint (block.position[ii].x+1, block.position[ii].y);
+                // Avoid blanking squares that need coloring
+                for (jj=0; jj<NUM_SQUARES_PER_BLOCK; jj++)
+                {
+                    if (block.position[ii].x-1 == new_xvals[jj] &&
+                        block.position[ii].y == new_yvals[jj])
+                    {
+                        matchFound = 1;
+                    }
+                }                            
                 
+                if (matchFound == 0)
+                {
+                    SetTableCellAttribute (main_ph, PNLMAIN_GRID, MakePoint (block.position[ii].x-1, block.position[ii].y), 
+                                           ATTR_TEXT_BGCOLOR, VAL_WHITE);
+                }
+            } 
+            
+            // Color squares
+            for (ii=0; ii<NUM_SQUARES_PER_BLOCK; ii++)
+            {     
                 SetTableCellAttribute (main_ph, PNLMAIN_GRID, block.position[ii], ATTR_TEXT_BGCOLOR, block.color);
-            }   
+            }            
             
             for (ii=0; ii<block.num_low_points; ii++)
             {
