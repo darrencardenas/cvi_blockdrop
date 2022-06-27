@@ -18,7 +18,7 @@ A timer control is used to update block positions.
 - Soft Drop: DOWN ARROW
 - Rotate Clockwise: UP ARROW or X
 - Rotate Counter-Clockwise: CTRL or Z
-- Pause: ESC or F1
+- Pause: ESC
 - Quit: CTRL+Q
 
 

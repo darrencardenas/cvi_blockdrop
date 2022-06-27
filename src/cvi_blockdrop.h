@@ -58,7 +58,6 @@ char *void;
 #define BLOCK_Z                 'Z'  
 #define NUM_BLOCKS_TYPES        7  // Exclude random block    
 #define NUM_SQUARES_PER_BLOCK   4
-#define START_BLOCK             BLOCK_RANDOM  // Normally BLOCK_RANDOM
 #define FIRST_BLOCK_NO          0
 #define FIRST_BLOCK_YES         1
         

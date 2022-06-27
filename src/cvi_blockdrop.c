@@ -30,6 +30,8 @@ static int g_keydown = 0;
 
 static double g_speed = NORMAL_SPEED;
 
+static int g_startBlock = BLOCK_RANDOM;  // Normally BLOCK_RANDOM
+
 //==============================================================================
 // Static functions
 
@@ -40,9 +42,9 @@ static double g_speed = NORMAL_SPEED;
 // Global functions
 
 int main (int argc, char *argv[])
-{
-    int postinghandle;
+{    
     int status = 0;
+    intptr_t postinghandle = 0;
     
     if (InitCVIRTE (0, argv, 0) == 0)
     {
@@ -454,6 +456,7 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
             if (paused == 0)
             {
                 SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_ENABLED, 0);
+                
                 // Dim block control buttons
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECCW, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 1);
@@ -461,11 +464,17 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNSTART, ATTR_DIMMED, 1);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNDOWN, ATTR_DIMMED, 1);
+                
+                // Disable keyboard controls except for pause and quit
+                SetMsgCallbackAttribute (main_ph, WM_KEYDOWN, ATTR_ENABLED, 0);
+                SetMsgCallbackAttribute (main_ph, WM_KEYUP, ATTR_ENABLED, 0);
+
                 paused = 1;
             }
             else
             {
                 SetCtrlAttribute (main_ph, PNLMAIN_TIMERADVANCE, ATTR_ENABLED, 1);
+                
                 // Show block control buttons
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECCW, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNROTATECW, ATTR_DIMMED, 0);
@@ -473,6 +482,10 @@ int CVICALLBACK CB_BtnPause (int panel, int control, int event,
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNRIGHT, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNSTART, ATTR_DIMMED, 0);
                 SetCtrlAttribute (main_ph, PNLMAIN_BTNDOWN, ATTR_DIMMED, 0);
+                
+                // Enable keyboard controls
+                SetMsgCallbackAttribute (main_ph, WM_KEYDOWN, ATTR_ENABLED, 1);
+                SetMsgCallbackAttribute (main_ph, WM_KEYUP, ATTR_ENABLED, 1);
                 paused = 0;
             }            
             break;
@@ -2049,11 +2062,6 @@ int CVICALLBACK CB_KeyDown (int panelHandle, int message, unsigned int* wParam,
     {
         CallCtrlCallback (main_ph, PNLMAIN_BTNROTATECW, EVENT_COMMIT, 0, 0, 0);            
     }    
-    // Monitor for pause
-    else if ((g_keydown == 0) && (*wParam == VK_F1))
-    {
-        CallCtrlCallback (main_ph, PNLMAIN_BTNPAUSE, EVENT_COMMIT, 0, 0, 0);
-    } 
     
     return 0;
 }  // End of CB_KeyDown()
@@ -2230,7 +2238,7 @@ int SpawnBlock (int first_block)
     int ii = 0;  // Loop iterator    
       
     // Random first block
-    if ((first_block == FIRST_BLOCK_YES) && (START_BLOCK == BLOCK_RANDOM))
+    if ((first_block == FIRST_BLOCK_YES) && (g_startBlock == BLOCK_RANDOM))
     {   
         // Start pseudo randomly
         srand (time (NULL));  
@@ -2238,32 +2246,32 @@ int SpawnBlock (int first_block)
         // Avoid S and Z blocks on the first block
         block_index = rand () % (NUM_BLOCKS_TYPES - 2);
     }
-    // Selective first block for debugging
+    // Selective first block, for debug purposes
     else if (first_block == FIRST_BLOCK_YES)
     {
-        switch (START_BLOCK)
+        switch (g_startBlock)
         {
-            case BLOCK_O:
-                block_index = 3;
-                break;
             case BLOCK_I:
                 block_index = 0;
-                break;
-            case BLOCK_Z:
-                block_index = 6;
-                break;          
+                break;       
             case BLOCK_J:
                 block_index = 1;
-                break;          
+                break;                   
+            case BLOCK_L:
+                block_index = 2;
+                break;
+            case BLOCK_O:
+                block_index = 3;
+                break;                
             case BLOCK_S:
                 block_index = 5;
                 break;          
             case BLOCK_T:
                 block_index = 4;
-                break;          
-            case BLOCK_L:
-                block_index = 2;
-                break;                    
+                break;                 
+            case BLOCK_Z:
+                block_index = 6;
+                break;                   
             default:
                 MessagePopup ("Error", "Unknown start block");
                 return -1; 
