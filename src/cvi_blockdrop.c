@@ -2155,7 +2155,7 @@ int CheckForLineClears (void)
     {
         if (numLineClears == 4)
         {            
-            PlaySound (SFX_CLEAR_TETRIS, NULL, SND_FILENAME | SND_ASYNC);     
+            PlaySound (SFX_CLEAR_4LINES, NULL, SND_FILENAME | SND_ASYNC);     
         }
         else
         {

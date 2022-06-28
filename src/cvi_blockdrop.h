@@ -39,7 +39,7 @@ char *void;
 // Sound effects
 #define FOLDER_SFX              "sfx\\"
 #define SFX_CLEAR_LINE          FOLDER_SFX "clear_line.wav"
-#define SFX_CLEAR_TETRIS        FOLDER_SFX "clear_tetris.wav"
+#define SFX_CLEAR_4LINES        FOLDER_SFX "clear_4lines.wav"
 #define SFX_ROTATE              FOLDER_SFX "rotate.wav"
 #define SFX_GAME_OVER           FOLDER_SFX "game_over.wav"
 
