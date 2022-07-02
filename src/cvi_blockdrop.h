@@ -96,6 +96,12 @@ typedef struct
 //==============================================================================
 // Global functions
 
+int CVICALLBACK CB_BtnRotateCW (int panel, int control, int event,
+                                void *callbackData, int eventData1, int eventData2);
+
+int CVICALLBACK CB_BtnRotateCCW (int panel, int control, int event,
+                                 void *callbackData, int eventData1, int eventData2);
+
 int CVICALLBACK CB_KeyDown (int panelHandle, int message, unsigned int* wParam, 
                             unsigned int* lParam, void* callbackData);
 
