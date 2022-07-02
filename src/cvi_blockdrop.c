@@ -511,8 +511,6 @@ int CVICALLBACK CB_BtnQuit (int panel, int control, int event,
 }  // End of CB_BtnQuit()
 
 
-
-
 int CVICALLBACK CB_BtnRotate (int panel, int control, int event,
                               void *callbackData, int eventData1, int eventData2)
 {   
@@ -1782,7 +1780,7 @@ int CVICALLBACK CB_BtnRotateCW (int panel, int control, int event,
     }
     return 0;
     
-}  // End of CB_BtnRotateCW
+}  // End of CB_BtnRotateCW()
 
 
 int CVICALLBACK CB_BtnStart (int panel, int control, int event,

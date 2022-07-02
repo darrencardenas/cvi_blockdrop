@@ -87,7 +87,7 @@ typedef struct
     int num_left_points;
     Point left_points[NUM_SQUARES_PER_BLOCK];
     int num_right_points;
-    Point right_points[NUM_SQUARES_PER_BLOCK];        
+    Point right_points[NUM_SQUARES_PER_BLOCK];    
 } blockData;
         
 //==============================================================================
@@ -95,6 +95,8 @@ typedef struct
 
 //==============================================================================
 // Global functions
+
+int AdvanceBlock (void);
 
 int CVICALLBACK CB_BtnRotateCW (int panel, int control, int event,
                                 void *callbackData, int eventData1, int eventData2);
@@ -113,8 +115,6 @@ int CheckForLineClears (void);
 int ClearGrid (void);
 
 int SpawnBlock (int first_block);
-
-int AdvanceBlock (void);
 
 #ifdef __cplusplus
     }
